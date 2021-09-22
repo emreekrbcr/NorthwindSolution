@@ -1,0 +1,1 @@
+Projede büyük ölçüde Engin Demiroğ Hocamızın sunmuş olduğu içeriklerden ve kendisinin yakın zamanda youtube'daki ücretsiz kampından ve udemy'deki videolarından faydalandığımı belirtmek isterim. Bize böyle değerli bilgiler paylaştığı için kendisine teşekkür ediyorum.
