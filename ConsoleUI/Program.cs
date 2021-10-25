@@ -1,5 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
+using Business.Concrete;
+using DataAccess.Concrete.EntityFramework;
+using Entities.Concrete;
 
 namespace ConsoleUI
 {
@@ -7,24 +12,25 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            BiseyYap();
-            Console.WriteLine(Convert.ToInt32(stopwatch.Elapsed.TotalSeconds));
-        }
+            Deneme deneme2 = new Deneme();
+            deneme2.Sayi = 5;
+            deneme2.SetWord("ankara");
 
-        static void BiseyYap()
+            var propertyInfo = typeof(Deneme).GetField("Word", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            Console.WriteLine(propertyInfo?.GetValue(deneme2));
+        }
+    }
+
+
+    class Deneme
+    {
+        private string Word;
+        internal int Sayi { get; set; }
+
+        public void SetWord(string value)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            while (true)
-            {
-                if (stopwatch.Elapsed.TotalSeconds == 5)
-                {
-                    Console.WriteLine("İşlem tamamlandı");
-                    return;
-                }
-            }
+            Word = value;
         }
     }
 }

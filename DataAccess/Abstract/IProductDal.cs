@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using Core.DataAccess;
 using Entities.Concrete;
-using Entities.Concrete.Dtos;
+using Entities.Dtos;
 
 namespace DataAccess.Abstract
 {

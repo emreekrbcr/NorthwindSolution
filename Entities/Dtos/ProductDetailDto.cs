@@ -1,6 +1,6 @@
 ﻿using Core.Entities.Abstract;
 
-namespace Entities.Concrete.Dtos
+namespace Entities.Dtos
 {
     public class ProductDetailDto:IDto
     {

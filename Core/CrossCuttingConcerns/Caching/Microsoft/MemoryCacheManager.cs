@@ -12,7 +12,7 @@ namespace Core.CrossCuttingConcerns.Caching.Microsoft
     {
         //Önemli!!! Normalde bağımlılık zinciri WebAPI-->Business-->DataAccess şeklinde ilerliyor ancak Aspect'lerimiz bu zincirin içerisinde değil bambaşka bir yerde dolayısıyla Aspect için çözümleme yaparken kendi yazdığımız ServiceTool'u kullanmamız gerek. Bunu her proje için ortak çözümlemeleri yapacak CoreModule'a ekleyebiliriz
         
-        //Aşağıda dikkat edilirse aynı metodları aynı isimlerle manyak gibi çağırıp çağırıp duruyor gibi duruyoruz. Direkt bunu nerede kullanacak oraya yazabilirdik. Ancak yarın öbür gün sistemi Microsoft'un Memory Cache'in başka bir yapıya çevirmek istersek bu metodlara bağımlı olduğumuzdan dolayı patlarız. Patlalamak için Interface'den inherit edilen bir class'ın içine koyup kendi sistemimize adapte ediyoruz. Buna da Adapter Pattern deniyor.  
+        //Aşağıda dikkat edilirse aynı metodları aynı isimlerle çağırıp çağırıp duruyormuş gibi gözüküyor. Böyle yapmadan direkt bu metodları nerede kullanacak oraya yazabilirdik. Ancak yarın öbür gün sistemi Microsoft'un Memory Cache'in başka bir yapıya çevirmek istersek bu metodlara bağımlı olduğumuzdan dolayı patlarız. Patlamamak için Interface'den inherit edilen bir class'ın içine koyup kendi sistemimize adapte ediyoruz. Buna da Adapter Pattern deniyor.
 
         private readonly IMemoryCache _memoryCache;
 
@@ -62,7 +62,7 @@ namespace Core.CrossCuttingConcerns.Caching.Microsoft
                 cacheCollectionValues.Add(cacheItemValue);
             }
             //Regex'e uyanları kontrol et ve al
-            var regex = new Regex(pattern, RegexOptions.Singleline | RegexOptions.Singleline | RegexOptions.IgnoreCase);
+            var regex = new Regex(pattern, RegexOptions.Singleline | RegexOptions.Compiled | RegexOptions.IgnoreCase);
             var keysToRemove = cacheCollectionValues.Where(d => regex.IsMatch(d.Key.ToString())).Select(d => d.Key)
                 .ToList();
             //Onları bellekten uçur

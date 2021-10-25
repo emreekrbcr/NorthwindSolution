@@ -76,6 +76,14 @@ namespace WebAPI.Controllers
             return result;
         }
 
+        [HttpPost("addtransactionaltest")]
+        public IActionResult AddTransactionalTest(Product[] products)
+        {
+            IActionResult result =
+                ApiHelper.CheckRequestResult(_productService.AddTransactionalTest(products[0], products[1]));
+            return result;
+        }
+
         #endregion
 
         #region GetDto

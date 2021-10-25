@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Core.DataAccess.EntityFramework;
-using Entities.Concrete.Dtos;
+using Entities.Dtos;
 
 namespace DataAccess.Concrete.EntityFramework
 {

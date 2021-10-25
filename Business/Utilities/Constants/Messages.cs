@@ -1,7 +1,4 @@
-﻿using Entities.Concrete;
-using Entities.Concrete.Dtos;
-
-namespace Business.Constants.Messages
+﻿namespace Business.Utilities.Constants
 {
     public static class Messages
     {
@@ -61,6 +58,11 @@ namespace Business.Constants.Messages
         public static class SystemMessages
         {
             public const string MaintenanceTime = "System under maintenance";
+        }
+
+        public static class CommonMessages
+        {
+            public const string OperationSucceeded = "Operation was succeeded";
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-using Business.Constants.Messages;
+using Business.Utilities.Constants;
 using Castle.DynamicProxy;
 using Core.Extensions;
 using Core.Utilities.Interceptors;

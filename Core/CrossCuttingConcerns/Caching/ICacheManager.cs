@@ -4,7 +4,7 @@
     public interface ICacheManager
     {
         T Get<T>(string key);
-        object Get(string key);
+        object Get(string key); //yukarıdakiden farkı, bir tip dönüşümü yani casting işlemi yapmamız gerekir
         void Add(string key, object value, int duration);
         bool CheckIfInCache(string key);
         void Remove(string key);

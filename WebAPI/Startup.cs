@@ -67,6 +67,8 @@ namespace WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCustomExceptionMiddleware(); //Kendi yazdýðýmýz exception handler mekanizmasý
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
