@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
+using System.Threading.Tasks;
 using Business.Abstract;
 using Business.BusinessAspects.Autofac;
 using Business.Utilities.Constants;
@@ -40,7 +41,7 @@ namespace Business.Concrete
         #region Reading
         [Cache]
         //[Performance(3)]
-        public IDataResult<List<Product>> GetAll()
+        public async Task<IDataResult<List<Product>>> GetAll()
         {
             //if (DateTime.Now.Hour == 19)
             //{
@@ -49,39 +50,39 @@ namespace Business.Concrete
 
             //Thread.Sleep(6000);
 
-            return new SuccessDataResult<List<Product>>(_productDal.GetAll(),
+            return new SuccessDataResult<List<Product>>(await _productDal.GetAll(),
                 Messages.ProductMessages.SuccessMessages.ProductsListed);
         }
 
         [Cache]
         //[Performance(3)]
-        public IDataResult<Product> GetById(int id)
+        public async Task<IDataResult<Product>> GetById(int id)
         {
-            return new SuccessDataResult<Product>(_productDal.Get(p => p.ProductId == id),
+            return new SuccessDataResult<Product>(await _productDal.Get(p => p.ProductId == id),
                 Messages.ProductMessages.SuccessMessages.ProductListed);
         }
 
-        public IDataResult<List<Product>> GetAllByCategoryId(int id)
+        public async Task<IDataResult<List<Product>>> GetAllByCategoryId(int id)
         {
-            return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.CategoryId == id),
+            return new SuccessDataResult<List<Product>>(await _productDal.GetAll(p => p.CategoryId == id),
                 Messages.ProductMessages.SuccessMessages.ProductsListed);
         }
 
-        public IDataResult<List<Product>> GetAllByUnitPrice(decimal min, decimal max)
+        public async Task<IDataResult<List<Product>>> GetAllByUnitPrice(decimal min, decimal max)
         {
             return new SuccessDataResult<List<Product>>(
-                _productDal.GetAll(p => p.UnitPrice >= min && p.UnitPrice <= max),
+                await _productDal.GetAll(p => p.UnitPrice >= min && p.UnitPrice <= max),
                 Messages.ProductMessages.SuccessMessages.ProductsListed);
         }
 
-        public IDataResult<int> Count(Expression<Func<Product, bool>> filter = null)
+        public async Task<IDataResult<int>> Count(Expression<Func<Product, bool>> filter = null)
         {
-            return new SuccessDataResult<int>(_productDal.Count(filter), Messages.CommonMessages.OperationSucceeded);
+            return new SuccessDataResult<int>(await _productDal.Count(filter), Messages.CommonMessages.OperationSucceeded);
         }
 
-        public IDataResult<bool> Any(Expression<Func<Product, bool>> filter)
+        public async Task<IDataResult<bool>> Any(Expression<Func<Product, bool>> filter)
         {
-            return new SuccessDataResult<bool>(_productDal.Any(filter), Messages.CommonMessages.OperationSucceeded);
+            return new SuccessDataResult<bool>(await _productDal.Any(filter), Messages.CommonMessages.OperationSucceeded);
         }
 
         #endregion
@@ -90,44 +91,44 @@ namespace Business.Concrete
         [SecuredOperation("product.add,admin")]
         [Validation(typeof(ProductValidator))]
         [CacheRemove("IProductService.Get")]
-        public IResult Add(Product product)
+        public async Task<IResult> Add(Product product)
         {
-            IResult result = BusinessRules.Run(CheckIfCategoryLimitExceeded(product.CategoryId),
-                CheckIfProductNameAlreadyExists(product.ProductName), CheckIfTotalCategoryCountExceeded());
+            IResult result = BusinessRules.Run(await CheckIfCategoryLimitExceeded(product.CategoryId),
+                await CheckIfProductNameAlreadyExists(product.ProductName), await CheckIfTotalCategoryCountExceeded());
 
             if (!result.Success)
             {
                 return new ErrorResult(result.Messages);
             }
 
-            _productDal.Add(product);
+            await _productDal.Add(product);
             return new SuccessResult(Messages.ProductMessages.SuccessMessages.ProductAdded);
         }
 
         [CacheRemove("IProductService.Get")]
-        public IResult Update(Product product)
+        public async Task<IResult> Update(Product product)
         {
-            _productDal.Update(product);
+            await _productDal.Update(product);
             return new SuccessResult(Messages.ProductMessages.SuccessMessages.ProductUpdated);
         }
 
-        public IResult Delete(Product product)
+        public async Task<IResult> Delete(Product product)
         {
-            _productDal.Delete(product);
+            await _productDal.Delete(product);
             return new SuccessResult(Messages.ProductMessages.SuccessMessages.ProductDeleted);
         }
 
         [Transaction]
-        public IResult AddTransactionalTest(Product product1, Product product2)
+        public async Task<IResult> AddTransactionalTest(Product product1, Product product2)
         {
-            _productDal.Add(product1);
+            await _productDal.Add(product1);
 
             if (product2.UnitPrice < 20)
             {
                 throw new Exception("Ürün2'nin birim fiyatı 20'den küçük olduğu için eklenemiyor");
             }
 
-            _productDal.Add(product2);
+            await _productDal.Add(product2);
             return new SuccessResult(Messages.CommonMessages.OperationSucceeded);
         }
 
@@ -135,22 +136,22 @@ namespace Business.Concrete
 
         #region DtoReading
 
-        public IDataResult<List<ProductDetailDto>> GetProductDetails()
+        public async Task<IDataResult<List<ProductDetailDto>>> GetProductDetails()
         {
-            return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetails(),
+            return new SuccessDataResult<List<ProductDetailDto>>(await _productDal.GetProductDetails(),
                 Messages.ProductMessages.SuccessMessages.ProductDetailsListed);
         }
 
-        public IDataResult<ProductDetailDto> GetProductDetail(int id)
+        public async Task<IDataResult<ProductDetailDto>> GetProductDetail(int id)
         {
-            return new SuccessDataResult<ProductDetailDto>(_productDal.GetProductDetail(p => p.ProductId == id),
+            return new SuccessDataResult<ProductDetailDto>(await _productDal.GetProductDetail(p => p.ProductId == id),
                 Messages.ProductMessages.SuccessMessages.ProductDetailListed);
         }
 
-        public IDataResult<List<ProductDetailDto>> GetProductDetailsByStock(short stockLimit)
+        public async Task<IDataResult<List<ProductDetailDto>>> GetProductDetailsByStock(short stockLimit)
         {
             return new SuccessDataResult<List<ProductDetailDto>>(
-                _productDal.GetProductDetails(p => p.UnitsInStock <= stockLimit),
+                await _productDal.GetProductDetails(p => p.UnitsInStock <= stockLimit),
                 Messages.ProductMessages.SuccessMessages.ProductDetailsListed);
         }
 
@@ -158,10 +159,10 @@ namespace Business.Concrete
 
         #region BusinessRules
 
-        private IResult CheckIfCategoryLimitExceeded(int categoryId)
+        private async Task<IResult> CheckIfCategoryLimitExceeded(int categoryId)
         {
             //int result = _productDal.GetAll(p => p.CategoryId == categoryId).Count; //koleksiyona sorgu atar
-            int result = _productDal.Count(p => p.CategoryId == categoryId);
+            int result = await _productDal.Count(p => p.CategoryId == categoryId);
             if (result > 10)
             {
                 return new ErrorResult(Messages.ProductMessages.ErrorMessages.CategoryLimitExceeded);
@@ -169,10 +170,10 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        private IResult CheckIfProductNameAlreadyExists(string productName)
+        private async Task<IResult> CheckIfProductNameAlreadyExists(string productName)
         {
             //bool result = _productDal.GetAll(p => p.ProductName == productName).Any(); //koleksiyona sorgu atar
-            bool result = _productDal.Any(p => p.ProductName == productName);
+            bool result = await _productDal.Any(p => p.ProductName == productName);
             if (result)
             {
                 return new ErrorResult(Messages.ProductMessages.ErrorMessages.ProductNameAlreadyExists);
@@ -181,10 +182,12 @@ namespace Business.Concrete
         }
 
         //Bu kural ProductManager'ın Category servisini nasıl yorumladığıyla alakalı ondan dolayı buraya yazarız. Eğer kendi içerisinde çalışması gereken bir metod olsaydı direk ordan çağırır alırdık.
-        private IResult CheckIfTotalCategoryCountExceeded()
+        private async Task<IResult> CheckIfTotalCategoryCountExceeded()
         {
             //int count = _categoryService.GetAll().Data.Count; //koleksiyona sorgu atar
-            int count = _categoryService.Count().Data;
+            var result = await _categoryService.Count();
+            int count = result.Data;
+
             if (count > 15)
             {
                 return new ErrorResult(Messages.ProductMessages.ErrorMessages.TotalCategoryCountExceeded);

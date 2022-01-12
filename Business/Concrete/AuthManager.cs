@@ -1,4 +1,5 @@
-﻿using Business.Abstract;
+﻿using System.Threading.Tasks;
+using Business.Abstract;
 using Business.Utilities.Constants;
 using Core.Entities.Concrete;
 using Core.Entities.Concrete.Dtos;
@@ -21,9 +22,9 @@ namespace Business.Concrete
             _tokenHelper = tokenHelper;
         }
 
-        public IDataResult<User> Register(UserForRegisterDto userForRegisterDto)
+        public async Task<IDataResult<User>> Register(UserForRegisterDto userForRegisterDto)
         {
-            IResult result = BusinessRules.Run(CheckIfUserAlreadyExists(userForRegisterDto.Email));
+            IResult result = BusinessRules.Run(await CheckIfUserAlreadyExists(userForRegisterDto.Email));
 
             if (!result.Success)
             {
@@ -42,13 +43,13 @@ namespace Business.Concrete
                 Email = userForRegisterDto.Email,
                 Status = true
             };
-            _userService.Add(user);
+            await _userService.Add(user);
             return new SuccessDataResult<User>(user, Messages.AuthMessages.SuccessMessages.UserRegistered);
         }
 
-        public IDataResult<User> Login(UserForLoginDto userForLoginDto)
+        public async Task<IDataResult<User>> Login(UserForLoginDto userForLoginDto)
         {
-            var userToCheck = _userService.GetByEmail(userForLoginDto.Email);
+            var userToCheck = await _userService.GetByEmail(userForLoginDto.Email);
 
             if (userToCheck.Data == null)
             {
@@ -64,9 +65,9 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(userToCheck.Data, Messages.AuthMessages.SuccessMessages.SuccessfulLogin);
         }
 
-        public IDataResult<AccessToken> CreateAccessToken(User user)
+        public async Task<IDataResult<AccessToken>> CreateAccessToken(User user)
         {
-            var claims = _userService.GetClaims(user);
+            var claims = await _userService.GetClaims(user);
             var accessToken = _tokenHelper.CreateToken(user, claims.Data);
             return new SuccessDataResult<AccessToken>(accessToken,
                 Messages.AuthMessages.SuccessMessages.AccessTokenCreated);
@@ -74,9 +75,11 @@ namespace Business.Concrete
 
         #region BusinessRules
 
-        private IResult CheckIfUserAlreadyExists(string email)
+        private async Task<IResult> CheckIfUserAlreadyExists(string email)
         {
-            if (_userService.GetByEmail(email).Data != null)
+            var result = await _userService.GetByEmail(email);
+
+            if (result.Data != null)
             {
                 return new ErrorResult(Messages.AuthMessages.ErrorMessages.UserAlreadyExists);
             }

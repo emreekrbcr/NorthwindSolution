@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Core.DataAccess
 {
@@ -10,13 +11,13 @@ namespace Core.DataAccess
     /// <typeparam name="T">Your entity</typeparam>
     public interface IEntityRepository<T>
     {
-        List<T> GetAll(Expression<Func<T, bool>> filter = null);
-        T Get(Expression<Func<T, bool>> filter);
-        void Add(T entity);
-        void Update(T entity);
-        void Delete(T entity);
+        Task<List<T>> GetAll(Expression<Func<T, bool>> filter = null);
+        Task<T> Get(Expression<Func<T, bool>> filter);
+        Task Add(T entity);
+        Task Update(T entity);
+        Task Delete(T entity);
 
-        int Count(Expression<Func<T, bool>> filter = null);
-        bool Any(Expression<Func<T, bool>> filter);
+        Task<int> Count(Expression<Func<T, bool>> filter = null);
+        Task<bool> Any(Expression<Func<T, bool>> filter);
     }
 }

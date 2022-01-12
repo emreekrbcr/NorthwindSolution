@@ -2,29 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Core.DataAccess.EntityFramework;
 using Entities.Dtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Concrete.EntityFramework
 {
     public class EfProductDal : EfEntityRepositoryBase<Product, NorthwindContext>, IProductDal
     {
-        public List<ProductDetailDto> GetProductDetails(Expression<Func<ProductDetailDto, bool>> filter = null)
+        public async Task<List<ProductDetailDto>> GetProductDetails(Expression<Func<ProductDetailDto, bool>> filter = null)
         {
             using (NorthwindContext context = new NorthwindContext())
             {
-                return filter == null ? GetResult(context).ToList() : GetResult(context).Where(filter).ToList();
+                return filter == null ? 
+                    await GetResult(context).ToListAsync() : 
+                    await GetResult(context).Where(filter).ToListAsync();
             }
         }
 
-        public ProductDetailDto GetProductDetail(Expression<Func<ProductDetailDto, bool>> filter)
+        public async Task<ProductDetailDto> GetProductDetail(Expression<Func<ProductDetailDto, bool>> filter)
         {
             using (NorthwindContext context = new NorthwindContext())
             {
 
-                return GetResult(context).SingleOrDefault(filter);
+                return await GetResult(context).SingleOrDefaultAsync(filter);
             }
         }
 

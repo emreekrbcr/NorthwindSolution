@@ -2,13 +2,15 @@
 using Core.DataAccess.EntityFramework;
 using Core.Entities.Concrete;
 using DataAccess.Abstract;
-using System.Linq; //aşağıdaki kodları yazmadan önce bunu mutlaka ekle yoksa yazarken sıkıntı çıkıyor
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore; //aşağıdaki kodları yazmadan önce bunu mutlaka ekle yoksa yazarken sıkıntı çıkıyor
 
 namespace DataAccess.Concrete.EntityFramework
 {
     public class EfUserDal : EfEntityRepositoryBase<User, NorthwindContext>, IUserDal
     {
-        public List<OperationClaim> GetClaims(User user)
+        public async Task<List<OperationClaim>> GetClaims(User user)
         {
             using (NorthwindContext context = new NorthwindContext())
             {
@@ -22,7 +24,7 @@ namespace DataAccess.Concrete.EntityFramework
                                  Name = oc.Name
                              };
 
-                return result.ToList();
+                return await result.ToListAsync();
             }
         }
     }

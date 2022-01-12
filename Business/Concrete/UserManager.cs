@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Business.Abstract;
 using Core.Entities.Concrete;
 using Core.Utilities.Results.Abstract;
@@ -16,20 +17,20 @@ namespace Business.Concrete
             _userDal = userDal;
         }
 
-        public IDataResult<List<OperationClaim>> GetClaims(User user)
+        public async Task<IDataResult<List<OperationClaim>>> GetClaims(User user)
         {
-            return new SuccessDataResult<List<OperationClaim>>(_userDal.GetClaims(user));
+            return new SuccessDataResult<List<OperationClaim>>(await _userDal.GetClaims(user));
         }
 
-        public IResult Add(User user)
+        public async Task<IResult> Add(User user)
         {
-            _userDal.Add(user);
+            await _userDal.Add(user);
             return new SuccessResult();
         }
 
-        public IDataResult<User> GetByEmail(string email)
+        public async Task<IDataResult<User>> GetByEmail(string email)
         {
-            return new SuccessDataResult<User>(_userDal.Get(u => u.Email == email));
+            return new SuccessDataResult<User>(await _userDal.Get(u => u.Email == email));
         }
     }
 }

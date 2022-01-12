@@ -22,9 +22,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login(UserForLoginDto userForLoginDto)
+        public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
-            var userForLoginResult = _authService.Login(userForLoginDto);
+            var userForLoginResult = await _authService.Login(userForLoginDto);
             IActionResult loginResult = ApiHelper.CheckRequestResult(userForLoginResult);
 
             if (loginResult.GetType() == typeof(BadRequestObjectResult)) //Giriş hatalı olduysa
@@ -35,15 +35,15 @@ namespace WebAPI.Controllers
             //Giriş başarılıysa devam ediyoruz ve token üretiyoruz
 
             IActionResult createTokenResult =
-                ApiHelper.CheckRequestResult(_authService.CreateAccessToken(userForLoginResult.Data));
+                ApiHelper.CheckRequestResult(await _authService.CreateAccessToken(userForLoginResult.Data));
 
             return createTokenResult;
         }
 
         [HttpPost("register")]
-        public IActionResult Register(UserForRegisterDto userForRegisterDto)
+        public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
-            var userForRegisterResult = _authService.Register(userForRegisterDto);
+            var userForRegisterResult = await _authService.Register(userForRegisterDto);
             IActionResult registerResult = ApiHelper.CheckRequestResult(userForRegisterResult);
 
             if (registerResult.GetType() == typeof(BadRequestObjectResult))
@@ -52,7 +52,7 @@ namespace WebAPI.Controllers
             }
 
             IActionResult createTokenResult =
-                ApiHelper.CheckRequestResult(_authService.CreateAccessToken(userForRegisterResult.Data));
+                ApiHelper.CheckRequestResult(await _authService.CreateAccessToken(userForRegisterResult.Data));
             return createTokenResult;
 
         }
