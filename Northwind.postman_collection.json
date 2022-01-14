@@ -1,0 +1,126 @@
+{
+	"info": {
+		"_postman_id": "04968c36-998a-4954-b542-8f8714b99c38",
+		"name": "Northwind",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:36253/api/products/getall",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:36253/api/products/getall",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "36253",
+					"path": [
+						"api",
+						"products",
+						"getall"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:36253/api/products/add",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjIiLCJlbWFpbCI6ImVtcmVAZW1yZS5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZW1yZSBiaWNlcmRvdmVyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiYWRtaW4iLCJuYmYiOjE2NDIwMjY4NTIsImV4cCI6MTY0MjAyNzQ1MiwiaXNzIjoiZW1yZWJhYmEuY29tIiwiYXVkIjoiZW1yZWJhYmEuY29tIn0.zON9pzZxhXFaSTNAfpEmtbpfa_wYm-MgbNDp6XAum0ul-oA8Kgf18IuEnEFy2ouOKHao7Wy3ipXxyZH1Ar4IfQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"productName\": \"C2\",\r\n    \"categoryId\": 5,\r\n    \"unitPrice\": 18.0000,\r\n    \"unitsInStock\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:36253/api/products/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "36253",
+					"path": [
+						"api",
+						"products",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:36253/api/auth/login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"emre@emre.com\",\r\n    \"password\":\"12345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:36253/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "36253",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:36253/api/auth/register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"kazim1234@gmail.com\",\r\n    \"password\":\"12345\",\r\n    \"firstName\":\"Kazım\",\r\n    \"lastName\":\"Akbaba\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:36253/api/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "36253",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
